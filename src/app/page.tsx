@@ -1,31 +1,13 @@
 'use client';
-import Image from "next/image";
 import { useState } from "react";
-import {
-  FaRegNewspaper,
-  FaSquareGithub,
-  FaSquareXTwitter,
-} from "react-icons/fa6";
-import type { UserCard } from "@/src/types";
-import { fetchCardByUserId } from "../lib/repositories/cardRepo";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 
 export default function Home() {
 
+
   const [userId, setUserId] = useState<string>("");
-  // const [userCard, setUserCard] = useState<UserCard | null>(null);
-
-  // const onSubmit = async (userId: string) => {
-  //   try {
-  //     const targetUserCard = await fetchCardByUserId(userId);
-  //     setUserCard(targetUserCard);
-
-  //   }catch(error) {
-  //     console.error("データの取得エラー", error);
-  //     alert("データが取得できません");
-  //   }
-  // }
+  const router = useRouter();
 
   return (
     <>
@@ -37,7 +19,8 @@ export default function Home() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              router.push(`/cards/${userId}`)
+              const id = userId.trim();
+              router.push(`/cards/${id}`)
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
           >
@@ -57,23 +40,6 @@ export default function Home() {
               名刺を見る
             </button>
           </form>
-        </div>
-        <div className="card w-60 bg-base-100 card-md shadow-sm">
-          <div className="card-body">
-            <h2 className="card-title">デジタル名刺アプリ</h2>
-            <h3 className="font-bold">自己紹介</h3>
-            <p>
-              A card component has a figure, a body part, and inside body there
-              are title and actions parts
-            </p>
-            <h3 className="font-bold">好きな技術</h3>
-            <p>React</p>
-            <div className="justify-center card-actions">
-              <FaSquareGithub size={48} />
-              <FaSquareXTwitter size={48} />
-              <FaRegNewspaper size={48} />
-            </div>
-          </div>
         </div>
       </div>
     </>

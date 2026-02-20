@@ -1,8 +1,22 @@
-export type UserCard = {
-  user_id: string;
-  name: string;
-  description: string;
-  github_id?: string;
-  qiita_id?: string;
-  x_id?: string;
-};
+// export type UserCard = {
+//   userId: string;
+//   name: string;
+//   description: string;
+//   githubId?: string;
+//   qiitaId?: string;
+//   xId?: string;
+// };
+
+// export type Skill = {
+//   skill: string;
+// };
+
+// export type UserCardWithSkills = {
+//   userId: string;
+//   name: string;
+//   description: string;
+//   githubId?: string;
+//   qiitaId?: string;
+//   xId?: string;
+//   skills: string[];
+// };
