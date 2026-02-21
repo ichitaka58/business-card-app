@@ -1,26 +1,47 @@
-import Image from "next/image";
-import { FaRegNewspaper, FaSquareGithub, FaSquareXTwitter } from "react-icons/fa6";
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const router = useRouter();
+
   return (
-    <div className="min-h-screen bg-gray-200 flex justify-center items-center">
-      <div className="card w-60 bg-base-100 card-md shadow-sm">
-        <div className="card-body">
-          <h2 className="card-title">デジタル名刺アプリ</h2>
-          <h3 className="font-bold">自己紹介</h3>
-          <p>
-            A card component has a figure, a body part, and inside body there
-            are title and actions parts
-          </p>
-          <h3 className="font-bold">好きな技術</h3>
-          <p>React</p>
-          <div className="justify-center card-actions">
-            <FaSquareGithub size={48} />
-            <FaSquareXTwitter size={48} />
-            <FaRegNewspaper size={48} />
-          </div>
+    <>
+      <div className="min-h-screen bg-gray-200 flex flex-col justify-center items-center">
+        <div>
+          <h1 className="text-2xl font-black text-center mb-4">
+            デジタル名刺アプリ
+          </h1>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setIsLoading(true);
+              const id = userId.trim();
+              router.push(`/cards/${id}`);
+            }}
+            className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
+          >
+            <fieldset className="fieldset">
+              <label className="label">ID</label>
+              <input
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                className="input validator"
+                placeholder="IDを入力"
+                required
+              />
+              <p className="validator-hint hidden">IDを入力してください</p>
+            </fieldset>
+            <button className="btn btn-neutral mt-4" type="submit" disabled={isLoading}>
+              名刺を見る
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }
