@@ -17,15 +17,14 @@ export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSki
     )
     .eq("user_id", userId)
     .maybeSingle();
-  
 
-  console.log(data);
   if (error) throw new Error(error.message);
+  // dataがなければNotFound表示
   if (!data) notFound();
 
-  // const skills = [];
+  // dataの中からskill名だけの配列を作る
   const skills: string[] = data.user_skill.map((us) => us.skills.name);
-  console.log(skills);
+  // 名刺に記載するユーザー情報とスキル名をひとつのオブジェクトにまとめる
   const userCardWithSkills: UserCardWithSkills = {
     userId: data.user_id,
     name: data.name,
@@ -37,6 +36,5 @@ export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSki
   };
   console.log(userCardWithSkills);
 
-  // return userCardWithSkills as UserCardWithSkills;
-  return  userCardWithSkills;
+  return userCardWithSkills;
 };

@@ -1,12 +1,11 @@
-'use client';
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
 export default function Home() {
-
-
   const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const router = useRouter();
 
   return (
@@ -19,8 +18,9 @@ export default function Home() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setIsLoading(true);
               const id = userId.trim();
-              router.push(`/cards/${id}`)
+              router.push(`/cards/${id}`);
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
           >
@@ -36,7 +36,7 @@ export default function Home() {
               />
               <p className="validator-hint hidden">IDを入力してください</p>
             </fieldset>
-            <button className="btn btn-neutral mt-4" type="submit">
+            <button className="btn btn-neutral mt-4" type="submit" disabled={isLoading}>
               名刺を見る
             </button>
           </form>
