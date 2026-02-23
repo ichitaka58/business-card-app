@@ -1,7 +1,9 @@
 import { UserCardWithSkills } from "@/src/types/card";
 import { supabase } from "../supabase/client";
 import { notFound } from "next/navigation";
+import { CardFormValues } from "@/src/app/cards/new/CardForm";
 
+// 名刺カード情報の取得
 export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSkills> => {
   const { data, error } = await supabase
     .from("users")
@@ -37,4 +39,15 @@ export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSki
   console.log(userCardWithSkills);
 
   return userCardWithSkills;
+};
+
+// 名刺ユーザー情報の登録
+export const createCard = async (values: CardFormValues) => {
+  const { data, error } = await supabase
+    .from("users")
+    .insert(values)
+    .select()
+    .single();
+
+  if (error) throw error;
 };
