@@ -1,4 +1,5 @@
 import { fetchCardByUserId } from "@/src/lib/repositories/cardRepo";
+import Link from "next/link";
 import {
   FaRegNewspaper,
   FaSquareGithub,
@@ -16,7 +17,7 @@ const CardPage = async ({
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col justify-center items-center">
-      <div className="card w-60 bg-base-100 card-md shadow-sm">
+      <div className="card w-60 bg-base-100 card-md shadow-sm mb-8">
         <div className="card-body">
           <h2 className="card-title">{userCardWithSkills.name}</h2>
           <div>
@@ -63,6 +64,9 @@ const CardPage = async ({
           </div>
         </div>
       </div>
+      <Link href="/" className="w-60 flex justify-center">
+        <button className="btn btn-wide btn-accent">戻る</button>
+      </Link>
     </div>
   );
 }

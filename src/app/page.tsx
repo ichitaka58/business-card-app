@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   const [userId, setUserId] = useState<string>("");
@@ -36,10 +37,20 @@ export default function Home() {
               />
               <p className="validator-hint hidden">IDを入力してください</p>
             </fieldset>
-            <button className="btn btn-neutral mt-4" type="submit" disabled={isLoading}>
+            <button
+              className="btn btn-neutral mt-4"
+              type="submit"
+              disabled={isLoading}
+            >
               名刺を見る
             </button>
           </form>
+          <p className="text-center mt-4 font-semibold">
+            <Link href="/cards/new" className="link">
+              新規登録
+            </Link>
+            はこちら
+          </p>
         </div>
       </div>
     </>
