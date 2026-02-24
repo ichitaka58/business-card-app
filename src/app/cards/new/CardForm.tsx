@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { CardFormSchema } from "./schema";
-
-export type CardFormValues = z.infer<typeof CardFormSchema>;
+import { CardFormSchema, CardFormValues } from "./schema";
+import { createCardAction } from "./actions";
 
 const CardForm = () => {
   const {
@@ -17,6 +16,7 @@ const CardForm = () => {
 
   const onSubmit = (values: CardFormValues) => {
     console.log(values);
+    createCardAction(values);
   };
 
   return (
@@ -28,7 +28,7 @@ const CardForm = () => {
         <label className="label">ユーザーID*</label>
         <input
           type="text"
-          className="input validator"
+          className={`input validator ${errors.userId && "input-error"}`}
           placeholder="ID"
           {...register("userId")}
         />
@@ -41,7 +41,7 @@ const CardForm = () => {
         <span className="label">お名前*</span>
         <input
           type="text"
-          className="input validator"
+          className={`input validator ${errors.name && "input-error"}`}
           placeholder="お名前"
           {...register("name")}
         />
@@ -53,7 +53,7 @@ const CardForm = () => {
       <label className="fieldset">
         <span className="label">自己紹介*</span>
         <textarea
-          className="textarea validator"
+          className={`textarea validator ${errors.description && "textarea-error"}`}
           placeholder="自己紹介文を入力"
           {...register("description")}
         />
@@ -64,11 +64,14 @@ const CardForm = () => {
 
       <label className="fieldset">
         <span className="label">好きな技術*</span>
-        <select className="select validator" {...register("skill")}>
+        <select
+          className={`select validator ${errors.skill && "select-error"}`}
+          {...register("skill")}
+        >
           <option></option>
-          <option>React</option>
-          <option>TypeScript</option>
-          <option>GitHub</option>
+          <option value={1}>React</option>
+          <option value={2}>TypeScript</option>
+          <option value={3}>GitHub</option>
         </select>
         {errors.skill && (
           <span className="text-red-500">{errors.skill.message}</span>
@@ -79,35 +82,39 @@ const CardForm = () => {
         <span className="label">GitHub ID</span>
         <input
           type="text"
-          className="input validator"
+          className={`input validator ${errors.githubId && "input-error"}`}
           placeholder="GitHub IDを入力"
           {...register("githubId")}
         />
-        <span className="validator-hint hidden">
-          {errors.githubId?.message}
-        </span>
+        {errors.githubId && (
+          <span className="text-red-500">{errors.githubId.message}</span>
+        )}
       </label>
 
       <label className="fieldset">
         <span className="label">Qiita ID</span>
         <input
           type="text"
-          className="input validator"
+          className={`input validator ${errors.qiitaId && "input-error"}`}
           placeholder="Qiita IDを入力"
           {...register("qiitaId")}
         />
-        <span className="validator-hint hidden">{errors.qiitaId?.message}</span>
+        {errors.qiitaId && (
+          <span className="text-red-500">{errors.qiitaId.message}</span>
+        )}
       </label>
 
       <label className="fieldset">
         <span className="label">X ID</span>
         <input
           type="text"
-          className="input validator"
+          className={`input validator ${errors.xId && "input-error"}`}
           placeholder="X IDを入力(@は不要)"
           {...register("xId")}
         />
-        <span className="validator-hint hidden">{errors.xId?.message}</span>
+        {errors.xId && (
+          <span className="text-red-500">{errors.xId?.message}</span>
+        )}
       </label>
 
       <p>*は必須入力です</p>
