@@ -1,22 +1,49 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import { CardFormSchema, CardFormValues } from "./schema";
+import { CardFormSchema, type CardFormValues } from "./schema";
+
 import { createCardAction } from "./actions";
+import { useRouter } from "next/navigation";
 
 const CardForm = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors, isValid, isSubmitting },
+    setError,
   } = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
     mode: "onBlur",
   });
 
-  const onSubmit = (values: CardFormValues) => {
-    console.log(values);
-    createCardAction(values);
+  const onSubmit = async (values: CardFormValues) => {
+    const res = await fetch("/api/cards", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    // JSONじゃなかった場合も落ちない。
+    const json = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      // サーバー側のエラーをフォームに出す setError: react-hook-formより
+      setError("userId", {
+        type: "server",
+        message: json?.message ?? "登録に失敗しました",
+      });
+      return;
+    }
+
+    reset();
+    router.push("/");
   };
 
   return (
@@ -65,16 +92,18 @@ const CardForm = () => {
       <label className="fieldset">
         <span className="label">好きな技術*</span>
         <select
-          className={`select validator ${errors.skill && "select-error"}`}
-          {...register("skill")}
+          className={`select validator ${errors.skillId && "select-error"}`}
+          {...register("skillId")}
         >
-          <option></option>
-          <option value={1}>React</option>
-          <option value={2}>TypeScript</option>
-          <option value={3}>GitHub</option>
+          <option value="" className="text-gray-400">
+            選択してください
+          </option>
+          <option value="1">React</option>
+          <option value="2">TypeScript</option>
+          <option value="3">GitHub</option>
         </select>
-        {errors.skill && (
-          <span className="text-red-500">{errors.skill.message}</span>
+        {errors.skillId && (
+          <span className="text-red-500">{errors.skillId.message}</span>
         )}
       </label>
 
@@ -125,15 +154,19 @@ const CardForm = () => {
         disabled={isSubmitting}
       >
         {isSubmitting ? (
-          <span className="loading loading-spinner"></span>
+          <>
+            <span className="loading loading-spinner"></span>
+            <span className="ml-2">Loading</span>
+          </>
         ) : (
           "登録"
         )}
       </button>
       <button
         className="btn btn-ghost mt-1"
-        type="reset"
+        type="button"
         disabled={isSubmitting}
+        onClick={() => reset()}
       >
         Reset
       </button>

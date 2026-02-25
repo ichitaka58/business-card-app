@@ -10,7 +10,7 @@ export const CardFormSchema = z.object({
     ),
   name: z.string().min(1, "お名前は必須入力です"),
   description: z.string().min(1, "自己紹介分は必須入力です"),
-  skill: z.string().min(1, "好きな技術は必須入力です"),
+  skillId: z.string().min(1, "好きな技術は必須入力です"),
   githubId: z
     .string()
     .regex(
@@ -27,7 +27,8 @@ export const CardFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  xId: z.string()
+  xId: z
+    .string()
     .regex(
       /^[a-zA-Z0-9_.-]+$/,
       "英数字、アンダーバー、ハイフン、ピリオドのみ使用できます",
@@ -35,3 +36,5 @@ export const CardFormSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
+
+export type CardFormValues = z.infer<typeof CardFormSchema>;

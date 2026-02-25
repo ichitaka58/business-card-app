@@ -1,10 +1,13 @@
 import { UserCardWithSkills } from "@/src/types/card";
 import { supabase } from "../supabase/client";
 import { notFound } from "next/navigation";
-import { CardFormValues } from "@/src/app/cards/new/CardForm";
+import { UsersInsert, UserSkillsInsert } from "@/src/app/cards/new/actions";
+import { CardFormValues } from "@/src/app/cards/new/schema";
 
 // 名刺カード情報の取得
-export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSkills> => {
+export const fetchCardByUserId = async (
+  userId: string,
+): Promise<UserCardWithSkills> => {
   const { data, error } = await supabase
     .from("users")
     .select(
@@ -43,11 +46,49 @@ export const fetchCardByUserId = async (userId: string): Promise<UserCardWithSki
 
 // 名刺ユーザー情報の登録
 export const createCard = async (values: CardFormValues) => {
+
+  const emptyToNull = (v?: string) => {
+    const s = (v ?? "").trim();
+    return s === "" ? null : s;
+  };
+
   const { data, error } = await supabase
     .from("users")
-    .insert(values)
+    .insert({
+      user_id: values.userId,
+      name: values.name,
+      description: values.description,
+      github_id: emptyToNull(values.githubId),
+      qiita_id: emptyToNull(values.qiitaId),
+      x_id: emptyToNull(values.xId),
+    })
     .select()
     .single();
 
   if (error) throw error;
+  return data;
+};
+
+export const createCardUser = async (insertUserData: UsersInsert) => {
+  const { data, error } = await supabase
+    .from("users")
+    .insert(insertUserData)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const createCardSkill = async (insertSkillData: UserSkillsInsert) => {
+  const { data, error } = await supabase
+    .from("user_skill")
+    .insert([
+      { user_id: insertSkillData.user_id, skill_id: insertSkillData.skill_id },
+    ])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 };
