@@ -3,8 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardFormSchema, type CardFormValues } from "./schema";
-
-import { createCardAction } from "./actions";
 import { useRouter } from "next/navigation";
 
 const CardForm = () => {
@@ -17,10 +15,16 @@ const CardForm = () => {
     formState: { errors, isValid, isSubmitting },
     setError,
   } = useForm<CardFormValues>({
+    // zodのスキーマをRHFのバリデーションシステムと接続
     resolver: zodResolver(CardFormSchema),
+    // フィールドからフォーカスが外れた時にバリデーションを実行
     mode: "onBlur",
   });
 
+  // react-hook-form の submit ハンドラ。フォーム送信時の処理
+  // フォームの入力値をAPI(/api/cards)に送信し、
+  // レスポンスがOKならフォームを初期化して名刺カードページに遷移。
+  // エラーの場合は setError を使ってフォームにエラーメッセージを表示する。
   const onSubmit = async (values: CardFormValues) => {
     const res = await fetch("/api/cards", {
       method: "POST",
@@ -41,9 +45,10 @@ const CardForm = () => {
       });
       return;
     }
-
+    // フォームをクリア
     reset();
-    router.push("/");
+    // 登録したIDの名刺カードページに遷移
+    router.push(`/cards/${json.user.user_id}`);
   };
 
   return (
@@ -151,7 +156,7 @@ const CardForm = () => {
       <button
         className="btn btn-neutral mt-4"
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isValid}
       >
         {isSubmitting ? (
           <>

@@ -37,4 +37,5 @@ export const CardFormSchema = z.object({
     .or(z.literal("")),
 });
 
+// スキーマから型を自動生成
 export type CardFormValues = z.infer<typeof CardFormSchema>;
