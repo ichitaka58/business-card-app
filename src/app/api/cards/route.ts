@@ -1,12 +1,6 @@
-import { Database } from "@/src/types/supabase";
 import { CardFormSchema, CardFormValues } from "../../cards/new/schema";
 import { NextResponse } from "next/server";
-
-
-export type UsersInsert = Database["public"]["Tables"]["users"]["Insert"];
-export type UserSkillInsert =
-  Database["public"]["Tables"]["user_skill"]["Insert"];
-
+import { createCard } from "@/src/lib/repositories/cardRepo";
 
 
 export const POST = async (req: Request) => {
@@ -16,7 +10,8 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ message: "入力内容を確認してください" }, { status: 400 });
   }
   try {
-    //
+    const user = await createCard(parsed.data);
+    return NextResponse.json({ success: true, user }, { status: 200 });
   }catch(e) {
     console.error(e); // supabaseのエラーメッセージを開発環境ではターミナルに表示
     // HTTPレスポンスとしてクライアント（ブラウザ）に返る。クライアント側のsetErrorに入る

@@ -1,8 +1,12 @@
 import { UserCardWithSkills } from "@/src/types/card";
-import { supabase } from "../supabase/client";
+import { supabase } from "../supabase/server";
 import { notFound } from "next/navigation";
-import { UsersInsert, UserSkillsInsert } from "@/src/app/cards/new/actions";
-import { CardFormValues } from "@/src/app/cards/new/schema";
+import type { CardFormValues } from "@/src/app/cards/new/schema";
+import { Database } from "@/src/types/supabase";
+
+export type UsersInsert = Database["public"]["Tables"]["users"]["Insert"];
+export type UserSkillInsert =
+  Database["public"]["Tables"]["user_skill"]["Insert"];
 
 // 名刺カード情報の取得
 export const fetchCardByUserId = async (
@@ -44,51 +48,48 @@ export const fetchCardByUserId = async (
   return userCardWithSkills;
 };
 
-// 名刺ユーザー情報の登録
+// 名刺ユーザー情報のDBへの登録
 export const createCard = async (values: CardFormValues) => {
-
+  // 空文字をnullに変更する関数
   const emptyToNull = (v?: string) => {
     const s = (v ?? "").trim();
     return s === "" ? null : s;
   };
 
-  const { data, error } = await supabase
-    .from("users")
-    .insert({
-      user_id: values.userId,
-      name: values.name,
-      description: values.description,
-      github_id: emptyToNull(values.githubId),
-      qiita_id: emptyToNull(values.qiitaId),
-      x_id: emptyToNull(values.xId),
-    })
-    .select()
-    .single();
+  const toUserInsert = (v: CardFormValues): UsersInsert => ({
+    user_id: v.userId,
+    name: v.name,
+    description: v.description,
+    github_id: emptyToNull(v.githubId),
+    qiita_id: emptyToNull(v.qiitaId),
+    x_id: emptyToNull(v.xId),
+  });
 
-  if (error) throw error;
-  return data;
-};
+  const toUserSkillInsert = (userId: string, skillId: string): UserSkillInsert => {
+    // skillIdをDB登録のため数値に変換
+    const n = Number(skillId);
+    if (!Number.isInteger(n) || n < 1) throw new Error("skillIdが不正です");
+    return { user_id: userId, skill_id: n }
+  };
 
-export const createCardUser = async (insertUserData: UsersInsert) => {
-  const { data, error } = await supabase
+  const insertUserData = toUserInsert(values);
+  const insertSkillData = toUserSkillInsert(values.userId, values.skillId);
+
+  // user, userErrorはJavaScriptの別名指定(エイリアス)
+  const { data: user, error: userError } = await supabase
     .from("users")
     .insert(insertUserData)
     .select()
     .single();
 
-  if (error) throw error;
-  return data;
-};
+  if (userError) throw userError;
 
-export const createCardSkill = async (insertSkillData: UserSkillsInsert) => {
-  const { data, error } = await supabase
+  const { error: skillError } = await supabase
     .from("user_skill")
-    .insert([
-      { user_id: insertSkillData.user_id, skill_id: insertSkillData.skill_id },
-    ])
-    .select()
-    .single();
+    .insert(insertSkillData);
 
-  if (error) throw error;
-  return data;
+  if (skillError) throw skillError;
+
+  return user;
 };
+

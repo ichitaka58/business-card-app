@@ -65,7 +65,7 @@ const CardPage = async ({
         </div>
       </div>
       <Link href="/" className="w-60 flex justify-center">
-        <button className="btn btn-wide btn-accent">戻る</button>
+        <button className="btn btn-wide btn-accent">ホームに戻る</button>
       </Link>
     </div>
   );
