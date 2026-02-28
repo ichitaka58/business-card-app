@@ -6,6 +6,7 @@ import Link from "next/link";
 export default function Home() {
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const router = useRouter();
 
@@ -21,6 +22,10 @@ export default function Home() {
               e.preventDefault();
               setIsLoading(true);
               const id = userId.trim();
+              if (!id) {
+                setError("IDを入力してください");
+                return;
+              }
               router.push(`/cards/${id}`);
             }}
             className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
@@ -31,11 +36,10 @@ export default function Home() {
                 type="text"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
-                className="input validator"
+                className={`input validator ${error && "input-error"}`}
                 placeholder="IDを入力"
-                required
               />
-              <p className="validator-hint hidden">IDを入力してください</p>
+              {error && <p role="alert" className="text-red-500">{error}</p>}
             </fieldset>
             <button
               className="btn btn-neutral mt-4"
