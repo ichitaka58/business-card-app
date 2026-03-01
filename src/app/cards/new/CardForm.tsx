@@ -57,46 +57,62 @@ const CardForm = () => {
       className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
     >
       <fieldset className="fieldset">
-        <label className="label">ユーザーID*</label>
+        <label htmlFor="userId" className="label">
+          ユーザーID*
+        </label>
         <input
+          id="userId"
+          aria-describedby="userId-error"
           type="text"
           className={`input validator ${errors.userId && "input-error"}`}
           placeholder="ID"
           {...register("userId")}
         />
         {errors.userId && (
-          <p className="text-red-500">{errors.userId.message}</p>
+          <p id="userId-error" role="alert" className="text-red-500">
+            {errors.userId.message}
+          </p>
         )}
       </fieldset>
 
-      <label className="fieldset">
+      <label htmlFor="name" className="fieldset">
         <span className="label">お名前*</span>
         <input
+          id="name"
+          aria-describedby="name-error"
           type="text"
           className={`input validator ${errors.name && "input-error"}`}
           placeholder="お名前"
           {...register("name")}
         />
         {errors.name && (
-          <span className="text-red-500">{errors.name.message}</span>
+          <span id="name-error" role="alert" className="text-red-500">
+            {errors.name.message}
+          </span>
         )}
       </label>
 
-      <label className="fieldset">
+      <label htmlFor="description" className="fieldset">
         <span className="label">自己紹介*</span>
         <textarea
+          id="description"
+          aria-describedby="description-error"
           className={`textarea validator ${errors.description && "textarea-error"}`}
           placeholder="自己紹介文を入力"
           {...register("description")}
         />
         {errors.description && (
-          <span className="text-red-500">{errors.description.message}</span>
+          <span id="description-error" role="alert" className="text-red-500">
+            {errors.description.message}
+          </span>
         )}
       </label>
 
-      <label className="fieldset">
+      <label htmlFor="skillId" className="fieldset">
         <span className="label">好きな技術*</span>
         <select
+          id="skillId"
+          aria-describedby="skillId-error"
           className={`select validator ${errors.skillId && "select-error"}`}
           {...register("skillId")}
         >
@@ -108,46 +124,60 @@ const CardForm = () => {
           <option value="3">GitHub</option>
         </select>
         {errors.skillId && (
-          <span className="text-red-500">{errors.skillId.message}</span>
+          <span id="skillId-error" role="alert" className="text-red-500">
+            {errors.skillId.message}
+          </span>
         )}
       </label>
 
-      <label className="fieldset">
+      <label htmlFor="githubId" className="fieldset">
         <span className="label">GitHub ID</span>
         <input
+          id="githubId"
+          aria-describedby="githubId-error"
           type="text"
           className={`input validator ${errors.githubId && "input-error"}`}
           placeholder="GitHub IDを入力"
           {...register("githubId")}
         />
         {errors.githubId && (
-          <span className="text-red-500">{errors.githubId.message}</span>
+          <span id="githubId-error" role="alert" className="text-red-500">
+            {errors.githubId.message}
+          </span>
         )}
       </label>
 
-      <label className="fieldset">
+      <label htmlFor="qiitaId" className="fieldset">
         <span className="label">Qiita ID</span>
         <input
+          id="qiitaId"
+          aria-describedby="qiitaId-error"
           type="text"
           className={`input validator ${errors.qiitaId && "input-error"}`}
           placeholder="Qiita IDを入力"
           {...register("qiitaId")}
         />
         {errors.qiitaId && (
-          <span className="text-red-500">{errors.qiitaId.message}</span>
+          <span id="qiitaId-error" role="alert" className="text-red-500">
+            {errors.qiitaId.message}
+          </span>
         )}
       </label>
 
-      <label className="fieldset">
+      <label htmlFor="xId" className="fieldset">
         <span className="label">X ID</span>
         <input
+          id="xId"
+          aria-describedby="xId-error"
           type="text"
           className={`input validator ${errors.xId && "input-error"}`}
           placeholder="X IDを入力(@は不要)"
           {...register("xId")}
         />
         {errors.xId && (
-          <span className="text-red-500">{errors.xId?.message}</span>
+          <span id="xId-error" role="alert" className="text-red-500">
+            {errors.xId?.message}
+          </span>
         )}
       </label>
 
