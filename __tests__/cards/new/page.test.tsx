@@ -1,10 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { pushMock } from "@/jest.setup";
 import NewCardPage from "@/src/app/cards/new/page";
 
 describe("新規登録ページ", () => {
-  beforeEach(() => pushMock.mockClear());
 
   it("Display title", () => {
     render(<NewCardPage />);
