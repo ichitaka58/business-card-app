@@ -61,4 +61,43 @@ describe("新規登録ページ", () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
+  it("githubIdに日本語を入力するとエラーが表示される", async () => {
+    const user = userEvent.setup();
+    render(<NewCardPage />);
+
+    const githubIdInput = screen.getByPlaceholderText("GitHub IDを入力");
+    await user.click(githubIdInput);
+    await user.type(githubIdInput, "あいうえお");
+    await user.tab();
+
+    const errorMessage = await screen.findByText("英数字、アンダーバー、ハイフン、ピリオドのみ使用できます");
+    expect(errorMessage).toBeInTheDocument();
+  })
+
+  it("qiitaIdに日本語を入力するとエラーが表示される", async () => {
+    const user = userEvent.setup();
+    render(<NewCardPage />);
+
+    const qiitaIdInput = screen.getByPlaceholderText("Qiita IDを入力");
+    await user.click(qiitaIdInput);
+    await user.type(qiitaIdInput, "あいうえお");
+    await user.tab();
+
+    const errorMessage = await screen.findByText("英数字、アンダーバー、ハイフン、ピリオドのみ使用できます");
+    expect(errorMessage).toBeInTheDocument();
+  })
+
+    it("xIdに日本語を入力するとエラーが表示される", async () => {
+    const user = userEvent.setup();
+    render(<NewCardPage />);
+
+    const xIdInput = screen.getByPlaceholderText("X IDを入力(@は不要)");
+    await user.click(xIdInput);
+    await user.type(xIdInput, "あいうえお");
+    await user.tab();
+
+    const errorMessage = await screen.findByText("英数字、アンダーバー、ハイフン、ピリオドのみ使用できます");
+    expect(errorMessage).toBeInTheDocument();
+  })
+
 });
