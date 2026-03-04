@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react'
 import CardForm from './CardForm';
 
 const NewCardPage = () => {

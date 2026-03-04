@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+[![Jest Tests](https://github.com/ichitaka58/business-card-app/actions/workflows/jest.yml/badge.svg?branch=main&event=push)](https://github.com/ichitaka58/business-card-app/actions/workflows/jest.yml)
+[![Playwright Tests](https://github.com/ichitaka58/business-card-app/actions/workflows/playwright.yml/badge.svg?event=pull_request)](https://github.com/ichitaka58/business-card-app/actions/workflows/playwright.yml)
 
-## Getting Started
+# Business Card App (デジタル名刺アプリ)
 
-First, run the development server:
+このプロジェクトは、Next.jsで構築されたデジタル名刺アプリケーションです。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 主な技術スタック
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **フレームワーク**: [Next.js](https://nextjs.org/) (App Router対応)
+- **UIライブラリ**: [React 19](https://react.dev/)
+- **スタイリング**: [Tailwind CSS v4](https://tailwindcss.com/) / [DaisyUI v5](https://daisyui.com/)
+- **バックエンド / DB / 認証**: [Supabase](https://supabase.com/) (`@supabase/ssr` を使用)
+- **フォーム・バリデーション**: React Hook Form, Zod
+- **テスト**: 
+  - ユニットテスト: [Jest](https://jestjs.io/) & React Testing Library
+  - E2Eテスト: [Playwright](https://playwright.dev/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## プロジェクトのセットアップ
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **リポジトリのクローン**と依存関係のインストール
 
-## Learn More
+   ```bash
+   npm install
+   ```
+   *(必要に応じて `yarn`, `pnpm`, `bun` を使用してください)*
 
-To learn more about Next.js, take a look at the following resources:
+2. **環境変数の設定**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   `.env.example` を参考に、`.env.local` ファイルを作成し、必要な環境変数を設定してください。
+   (例: SupabaseのURLやAnon Keyなどの設定)
+   
+   ```bash
+   cp .env.example .env.local
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **開発サーバーの起動**
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ブラウザで [http://localhost:3000](http://localhost:3000) を開き、アプリケーションにアクセスします。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## スクリプト
+
+- `npm run dev` : 開発サーバーを起動します。
+- `npm run build` : プロダクション用のビルドを作成します。
+- `npm run start` : ビルドしたアプリケーションをプロダクションモードで起動します。
+- `npm run lint` : ESLintを使用してコードの静的解析を行います。
+- `npm run test` : Jestによるユニットテストを実行します。
+
+## プロジェクト構造（主要部分）
+
+- `src/app/` : Next.jsのApp Routerによる各ページのコンポーネントやAPIルート
+  - `cards/` : 名刺一覧、新規作成、詳細表示などの機能
+- `src/lib/` : アプリケーション全体で利用するライブラリやユーティリティ（例: Supabaseクライアント設定など）
+- `src/types/` : TypeScriptの型定義ファイル
+- `tests/` / `__tests__` : JestやPlaywrightのテストファイル群
