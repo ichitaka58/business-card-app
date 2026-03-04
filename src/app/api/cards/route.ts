@@ -1,4 +1,4 @@
-import { CardFormSchema, CardFormValues } from "../../cards/new/schema";
+import { CardFormSchema } from "../../cards/new/schema";
 import { NextResponse } from "next/server";
 import { createCard } from "@/src/lib/repositories/cardRepo";
 
